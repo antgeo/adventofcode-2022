@@ -8,7 +8,6 @@ ToWin = {1  => 2, 2 => 3, 3 => 1}
 
 def score_calc (player_hand, winning_hand)
     if player_hand == winning_hand
-        #win
         return player_hand + 6
     else
         return player_hand    
