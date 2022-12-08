@@ -1,5 +1,5 @@
 #!ruby 
-
+require 'set'
 input = File.open("inputs/day7.txt")
 
 class FileTree
@@ -8,6 +8,8 @@ class FileTree
         @children = []
         @parent = parent
         @size = 0 
+        @@dirs ||= Set.new
+        @@dirs.add self if parent
     end
     def parent
         @parent.nil? ? self : @parent
@@ -22,9 +24,8 @@ class FileTree
         return @size if @children.count == 0 
         return @children.map{|i| i.size}.reduce(:+) + @size
     end
-    def all_dir
-        return nil if @children.count == 0
-        return @children.map{|i| i.all_dir}.flatten.compact + @children
+    def self.all_dir
+        @@dirs
     end
 end
 
@@ -47,8 +48,7 @@ input.each do |line|
  end
 end
 
-
-directores = [root] + root.all_dir.uniq
+directores = FileTree.all_dir + [root]
 total_size = directores.map{|i| i.size if i.size < 100001}.compact.reduce(:+)
 puts "Part 1: #{total_size}"
 
